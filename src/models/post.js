@@ -21,6 +21,12 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             description: { type: DataTypes.STRING },
+            contact: {
+                type: DataTypes.STRING,
+                validate: {
+                    notEmpty: true,
+                },
+            },
             posterImage: {
                 type: DataTypes.STRING,
                 validate: {
@@ -53,5 +59,28 @@ module.exports = (sequelize, DataTypes) => {
             underscored: true,
         }
     );
+
+    Post.associate = db => {
+        // เชื่อมความ 3000 One to Many ระหว่าง post กับ user
+        Post.belongsTo(db.User, {
+            foreignKey: {
+                name: "userId",
+                allowNull: false,
+            },
+            // ในกรณีที่มีการลบ foreignKey จะไม่อนุญาติให้ลบ ถ้ามี constant
+            onDelete: "RESTRICT",
+        });
+
+        // เชื่อมความ 3000 One to One ระหว่าง post กับ transaction
+        Post.hasOne(db.Transaction, {
+            foreignKey: {
+                name: "postId",
+                allowNull: false,
+            },
+            // ในกรณีที่มีการลบ foreignKey จะไม่อนุญาติให้ลบ ถ้ามี constant
+            onDelete: "RESTRICT",
+        });
+    };
+
     return Post;
 };
