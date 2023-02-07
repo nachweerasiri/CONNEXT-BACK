@@ -1,7 +1,12 @@
-const { validateRegister } = require("../validators/auth-validator");
+const {
+    validateRegister,
+    validateLogin,
+} = require("../validators/auth-validator");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken"); // access token
+
 const { User } = require("../models");
 const createError = require("../utils/create-error");
-const bcrypt = require("bcryptjs");
 
 exports.register = async (req, res, next) => {
     try {
@@ -35,8 +40,47 @@ exports.register = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
-    // const value = validateLogin(req.body);
     try {
+        const value = validateLogin(req.body);
+        /** SELECT * FROM user WHERE email = value.email */
+        const user = await User.findOne({ where: { email: value.yourEmail } });
+        /** ถ้าไม่เหมือน user จะลั่น "Invalid email or password", 400*/
+        if (!user) {
+            createError("Invalid email or password", 400);
+        }
+
+        /** เอาไว้ เช็คว่า password ถูกต้องไหม */
+        const isCorrect = await bcrypt.compare(
+            value.newPassword,
+            user.password
+        );
+        /** ถ้าไม่เหมือน isCorrect จะลั่น "Invalid email or password", 400*/
+        if (!isCorrect) {
+            createError("Invalid email or password", 400);
+        }
+
+        const accessToken = jwt.sign(
+            {
+                id: user.id,
+                userName: user.userName,
+                email: user.email,
+                password: user.password,
+                profileImage: user.profileImage,
+                createAt: user.createAt,
+                updateAt: user.updateAt,
+            },
+            process.env.JWT_SECRET_KEY,
+            { expiresIn: process.env.JWT_EXPIRES_IN }
+        );
+
+        /** แก้ชื่อ value ใหม่ ให้ไปตรงกับ database */
+        // const newValueLogin = {
+        //     email: value.yourEmail,
+        //     password: value.newPassword,
+        // };
+        // await User.create(newValueLogin);
+
+        res.status(200).json({ accessToken });
     } catch (err) {
         next(err);
     }

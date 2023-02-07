@@ -3,6 +3,7 @@ const Joi = require("joi");
 
 const validate = require("./validate");
 
+/** REGISTER */
 const registerSchema = Joi.object({
     userName: Joi.string().trim().required().messages({
         "any.required": "User Name is required",
@@ -32,3 +33,11 @@ const registerSchema = Joi.object({
 
 exports.validateRegister = validate(registerSchema);
 // exports.validateLogin = validate(loginSchema);
+
+/** LOGIN */
+const loginSchema = Joi.object({
+    yourEmail: Joi.string().required(),
+    newPassword: Joi.string().required(),
+});
+
+exports.validateLogin = validate(loginSchema);
