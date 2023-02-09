@@ -7,6 +7,10 @@ module.exports = (err, req, res, next) => {
 
     if (err.name === "ValidatorError") {
         err.statusCode = 400;
+    } else if (err.name === "TokenExpiredError") {
+        err.statusCode = 401;
+    } else if (err.name === "JsonWebTokenError") {
+        err.statusCode = 401;
     }
 
     /** ให้มันขึ้น error ตาม statusCode ถ้าไม้ จะขึ้น 500 */

@@ -57,12 +57,13 @@ exports.login = async (req, res, next) => {
             createError("Invalid email or password", 400);
         }
 
+        /** payload อยู่ตรงนี้ */
         const accessToken = jwt.sign(
             {
                 id: user.id,
                 userName: user.userName,
                 email: user.email,
-                password: user.password,
+                // password: user.password,
                 profileImage: user.profileImage,
                 createAt: user.createAt,
                 updateAt: user.updateAt,
@@ -82,4 +83,8 @@ exports.login = async (req, res, next) => {
     } catch (err) {
         next(err);
     }
+};
+
+exports.getMe = (req, res, next) => {
+    res.status(200).json({ user: req.user });
 };
