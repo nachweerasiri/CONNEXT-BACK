@@ -10,6 +10,7 @@ const createError = require("../utils/create-error");
 
 exports.register = async (req, res, next) => {
     try {
+        console.log(req.body);
         const value = validateRegister(req.body);
 
         //** เช็คว่ามี email ที่ลงทะเบียนไว้หรือเปล่า */
@@ -43,17 +44,14 @@ exports.login = async (req, res, next) => {
     try {
         const value = validateLogin(req.body);
         /** SELECT * FROM user WHERE email = value.email */
-        const user = await User.findOne({ where: { email: value.yourEmail } });
+        const user = await User.findOne({ where: { email: value.email } });
         /** ถ้าไม่เหมือน user จะลั่น "Invalid email or password", 400*/
         if (!user) {
             createError("Invalid email or password", 400);
         }
 
         /** เอาไว้ เช็คว่า password ถูกต้องไหม */
-        const isCorrect = await bcrypt.compare(
-            value.newPassword,
-            user.password
-        );
+        const isCorrect = await bcrypt.compare(value.password, user.password);
         /** ถ้าไม่เหมือน isCorrect จะลั่น "Invalid email or password", 400*/
         if (!isCorrect) {
             createError("Invalid email or password", 400);
