@@ -8,52 +8,33 @@ module.exports = (sequelize, DataTypes) => {
         {
             topic: {
                 type: DataTypes.STRING,
-                allowNull: false,
-                validate: {
-                    notEmpty: true,
-                },
             },
             price: {
                 type: DataTypes.DECIMAL(10, 2), // 10 คือหลัก 2 คือทศนิยมได้แค่2ตัว
-                allowNull: false,
-                validate: {
-                    notEmpty: true,
-                },
             },
             description: { type: DataTypes.STRING },
             contact: {
                 type: DataTypes.STRING,
-                validate: {
-                    notEmpty: true,
-                },
             },
             posterImage: {
                 type: DataTypes.STRING,
-                validate: {
-                    notEmpty: true,
-                },
             },
-            ticketCategory: {
+            contact: {
                 type: DataTypes.STRING,
-                allowNull: false,
-                validate: {
-                    notEmpty: true,
-                },
             },
+            // ticketCategory: {
+            //     type: DataTypes.STRING,
+            // },
             postType: {
                 type: DataTypes.ENUM(POSTTYPE_SEEKER, POSTTYPE_SELLER),
-                allowNull: false,
-                validate: {
-                    notEmpty: true,
-                },
             },
-            availability: {
-                type: DataTypes.BOOLEAN,
-                allowNull: false,
-                validate: {
-                    notEmpty: true,
-                },
-            },
+            // availability: {
+            //     type: DataTypes.BOOLEAN,
+            //     allowNull: false,
+            //     validate: {
+            //         notEmpty: true,
+            //     },
+            // },
         },
         {
             underscored: true,
@@ -65,7 +46,6 @@ module.exports = (sequelize, DataTypes) => {
         Post.belongsTo(db.User, {
             foreignKey: {
                 name: "userId",
-                allowNull: false,
             },
             // ในกรณีที่มีการลบ foreignKey จะไม่อนุญาติให้ลบ ถ้ามี constant
             onDelete: "RESTRICT",
@@ -75,7 +55,6 @@ module.exports = (sequelize, DataTypes) => {
         Post.hasOne(db.Transaction, {
             foreignKey: {
                 name: "postId",
-                allowNull: false,
             },
             // ในกรณีที่มีการลบ foreignKey จะไม่อนุญาติให้ลบ ถ้ามี constant
             onDelete: "RESTRICT",

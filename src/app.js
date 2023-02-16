@@ -12,6 +12,7 @@ const userRoute = require("./routes/user-route");
 const authenticateMiddleware = require("./middlewares/authenticate");
 const notFoundMiddleware = require("./middlewares/not-found");
 const errorMiddleware = require("./middlewares/error");
+const postRoute = require("./routes/post-route");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(express.json()); // parsing requset body ส่งมาใน format ap
 
 app.use("/auth", authRoute);
 app.use("/users", authenticateMiddleware, userRoute);
+app.use("/post", authenticateMiddleware, postRoute);
 
 // อยู่ใน middlewares
 app.use(notFoundMiddleware);
@@ -39,6 +41,6 @@ app.listen(port, () =>
     console.log(chalk.bgMagenta.bold.italic`server running on port: ${port}`)
 );
 
-// // sync ไป table ใน mySQL workbench
+/* RESET ข้อมูลใน DATA ทั้งหมดด้วย / sync ไป table ใน mySQL workbench */
 // const { sequelize } = require("./models");
 // sequelize.sync({ force: true });
