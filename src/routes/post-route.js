@@ -5,14 +5,12 @@ const upload = require("../middlewares/upload");
 
 const router = express.Router();
 
+router.get("/seeker/:id", postController.getPostbyId);
+
 // router.get("/:postId", userController.getUserInfoById);
 
 // /post ก็คือ ไปที่ ../controllers/post-controller วิ่งไปทำงานที่ exports.post
-router.post(
-    "/",
-    upload.single("posterImage"),
-    postController.createPostAddTicket
-);
+router.post("/", upload.single("posterImage"), postController.createPostAddTicket);
 
 router.get("/:postType", postController.getPostAddticket);
 
