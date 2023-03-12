@@ -82,3 +82,55 @@ exports.getPostAddticket = async (req, res, next) => {
     next(err);
   }
 };
+
+/** เขียน DELETE แบบยาว */
+// exports.deletePost = async (req, res, next) => {
+//   try {
+//     const post = await Post.findOne({
+//       where: {
+//         userId: req.user.id,
+//         id: req.params.postId
+//       }
+//     });
+//     await post.destroy();
+//     res.status(200).json({ post });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
+/** เขียน DELETE แบบสั้น */
+exports.deletePost = async (req, res, next) => {
+  try {
+    await Post.destroy({
+      where: {
+        id: req.params.postId,
+        userId: req.user.id
+      }
+    });
+    res.status(200).json();
+  } catch (err) {
+    next(err);
+  }
+};
+
+/** EDIT */
+exports.editPosts = async (req, res, next) => {
+  try {
+    const editPost = await Post.findOne({
+      where: {
+        userId: req.user.id,
+        id: req.params.postId
+      }
+    });
+    await editPost.update({
+      topic: req.body.topic,
+      price: req.body.price,
+      description: req.body.description,
+      contact: req.body.contact
+    });
+    res.status(200).json({ editPost });
+  } catch (err) {
+    next(err);
+  }
+};

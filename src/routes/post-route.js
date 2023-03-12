@@ -23,6 +23,9 @@ router.get("/:postType", postController.getPostAddticket);
 /** get me ผ่าน middlewhere authenticate ถ้าผ่าน จะถูกไปทำงานใน authController ผ่าน mothod getMe*/
 // router.get("/me", authenticate, authController.getMe);
 
-// router.delete("/:postId", postController.deletePost);
+/** DELETE */
+router.delete("/:postId", postController.deletePost);
+/** EDIT */
+// router.put("/edit/:postId", authenticate, postController.editPosts);
 
 module.exports = router;
